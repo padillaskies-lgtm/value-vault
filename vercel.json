@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/member-count.js": {
+      "runtime": "@vercel/node"
+    }
+  }
+}
