@@ -1,15 +1,16 @@
 export default function handler(req, res) {
-  console.log('REDIRECT_URI:', process.env.DISCORD_REDIRECT_URI);  // ← add this line
+  const redirectUri = process.env.DISCORD_REDIRECT_URI;
+  console.log('REDIRECT_URI value:', JSON.stringify(redirectUri));
   
   const params = new URLSearchParams({
-    ...
-export default function handler(req, res) {
-  const params = new URLSearchParams({
     client_id: process.env.DISCORD_CLIENT_ID,
-    redirect_uri: process.env.DISCORD_REDIRECT_URI,
+    redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'identify guilds.members.read',
   });
 
-  res.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
+  const fullUrl = `https://discord.com/api/oauth2/authorize?${params}`;
+  console.log('Full URL being sent:', fullUrl);
+  
+  res.redirect(fullUrl);
 }
