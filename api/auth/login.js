@@ -1,4 +1,9 @@
 export default function handler(req, res) {
+  console.log('REDIRECT_URI:', process.env.DISCORD_REDIRECT_URI);  // ← add this line
+  
+  const params = new URLSearchParams({
+    ...
+export default function handler(req, res) {
   const params = new URLSearchParams({
     client_id: process.env.DISCORD_CLIENT_ID,
     redirect_uri: process.env.DISCORD_REDIRECT_URI,
