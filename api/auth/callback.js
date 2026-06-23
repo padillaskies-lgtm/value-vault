@@ -16,13 +16,9 @@ export default async function handler(req, res) {
       }),
     });
 
-    const tokenText = await tokenRes.text();
-    console.log('Token status:', tokenRes.status);
-    console.log('Token response:', tokenText);
+    if (!tokenRes.ok) return res.redirect('/?error=token_failed');
 
-    if (!tokenRes.ok) return res.redirect('/?error=token_failed&detail=' + encodeURIComponent(tokenText));
-
-    const tokenData = JSON.parse(tokenText);
+    const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
 
     const userRes = await fetch('https://discord.com/api/users/@me', {
@@ -38,23 +34,9 @@ export default async function handler(req, res) {
       { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
     );
 
-    if (!memberRes.ok) return res.redirect('/?error=not_member');
+    const memberText = await memberRes.text();
 
-    const sessionPayload = {
-      id: user.id,
-      username: user.username,
-      avatar: user.avatar,
-      verified: true,
-      exp: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    };
-
-    const sessionValue = Buffer.from(JSON.stringify(sessionPayload)).toString('base64');
-
-    res.setHeader('Set-Cookie', [
-      `vv_session=${sessionValue}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 3600}; Secure`,
-    ]);
-
-    res.redirect('/youtube-automation.html');
+    return res.redirect('/?debug=' + encodeURIComponent(memberText) + '&status=' + memberRes.status);
 
   } catch (err) {
     console.error(err);
