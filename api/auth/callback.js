@@ -28,11 +28,17 @@ export default async function handler(req, res) {
     if (!userRes.ok) return res.redirect('/?error=user_fetch_failed');
 
     const user = await userRes.json();
+    console.log('User ID:', user.id);
+    console.log('Guild ID:', process.env.DISCORD_GUILD_ID);
 
     const memberRes = await fetch(
       `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${user.id}`,
       { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
     );
+
+    console.log('Member check status:', memberRes.status);
+    const memberData = await memberRes.json();
+    console.log('Member check response:', JSON.stringify(memberData));
 
     if (!memberRes.ok) return res.redirect('/?error=not_member');
 
