@@ -8,6 +8,6 @@
     { "src": "/facebook-automation.html", "dest": "/api/auth/gate?page=facebook-automation.html" },
     { "src": "/whop-clipping.html", "dest": "/api/auth/gate?page=whop-clipping.html" },
     { "src": "/content-essentials.html", "dest": "/api/auth/gate?page=content-essentials.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/", "dest": "/index.html" }
   ]
 }
