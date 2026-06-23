@@ -5,18 +5,20 @@ export default function handler(req, res) {
   const cookie = req.headers.cookie || '';
   const match = cookie.match(/vv_session=([^;]+)/);
 
-  if (!match) return res.redirect('/?login=1');
+  if (!match) return res.redirect('/?login=1&reason=no_cookie');
 
   try {
-    const session = JSON.parse(Buffer.from(match[1], 'base64').toString('utf8'));
-    if (session.exp < Date.now()) return res.redirect('/?login=1');
+    const decoded = Buffer.from(match[1], 'base64').toString('utf8');
+    const session = JSON.parse(decoded);
+    
+    if (session.exp < Date.now()) return res.redirect('/?login=1&reason=expired');
 
     const page = req.query.page || 'index.html';
     const filePath = path.join(process.cwd(), page);
     const html = fs.readFileSync(filePath, 'utf8');
     res.setHeader('Content-Type', 'text/html');
     return res.send(html);
-  } catch {
-    return res.redirect('/?login=1');
+  } catch(e) {
+    return res.redirect('/?login=1&reason=parse_error&msg=' + encodeURIComponent(e.message));
   }
 }
