@@ -10,7 +10,7 @@ export default function handler(req, res) {
   try {
     const decoded = Buffer.from(match[1], 'base64').toString('utf8');
     const session = JSON.parse(decoded);
-    
+
     if (session.exp < Date.now()) return res.redirect('/?login=1');
 
     const page = req.query.page || 'index.html';
