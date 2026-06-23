@@ -34,9 +34,23 @@ export default async function handler(req, res) {
       { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
     );
 
-    const memberText = await memberRes.text();
+    if (!memberRes.ok) return res.redirect('/?error=not_member');
 
-    return res.redirect('/?debug=' + encodeURIComponent(memberText) + '&status=' + memberRes.status);
+    const sessionPayload = {
+      id: user.id,
+      username: user.username,
+      avatar: user.avatar,
+      verified: true,
+      exp: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    };
+
+    const sessionValue = Buffer.from(JSON.stringify(sessionPayload)).toString('base64');
+
+    res.setHeader('Set-Cookie',
+      `vv_session=${sessionValue}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 3600}; Secure`
+    );
+
+    res.redirect('/youtube-automation.html');
 
   } catch (err) {
     console.error(err);
