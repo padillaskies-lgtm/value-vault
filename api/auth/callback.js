@@ -13,7 +13,10 @@ export default async function handler(req, res) {
         redirect_uri: process.env.DISCORD_REDIRECT_URI,
       }),
     });
-    if (!tokenRes.ok) return res.redirect('/?error=token_failed');
+    if (!tokenRes.ok) {
+      const t = await tokenRes.text();
+      return res.redirect('/?error=token_failed&detail=' + encodeURIComponent(t));
+    }
     const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
     const userRes = await fetch('https://discord.com/api/users/@me', {
@@ -25,7 +28,10 @@ export default async function handler(req, res) {
       `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${user.id}`,
       { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
     );
-    if (!memberRes.ok) return res.redirect('/?error=not_member');
+    if (!memberRes.ok) {
+      const m = await memberRes.text();
+      return res.redirect('/?error=not_member&detail=' + encodeURIComponent(m));
+    }
     const sessionPayload = {
       id: user.id,
       username: user.username,
@@ -37,8 +43,8 @@ export default async function handler(req, res) {
     res.setHeader('Set-Cookie',
       `vv_session=${sessionValue}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 3600}; Secure`
     );
-    res.redirect('/youtube-automation.html');
+    return res.redirect('/youtube-automation.html');
   } catch (err) {
-    res.redirect('/?error=server_error');
+    return res.redirect('/?error=server_error&msg=' + encodeURIComponent(err.message));
   }
 }
