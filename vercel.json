@@ -2,12 +2,12 @@
   "version": 2,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/youtube-automation.html", "dest": "/api/gate?page=youtube-automation.html" },
-    { "src": "/youtube-prompts.html", "dest": "/api/gate?page=youtube-prompts.html" },
-    { "src": "/youtube-resources.html", "dest": "/api/gate?page=youtube-resources.html" },
-    { "src": "/facebook-automation.html", "dest": "/api/gate?page=facebook-automation.html" },
-    { "src": "/whop-clipping.html", "dest": "/api/gate?page=whop-clipping.html" },
-    { "src": "/content-essentials.html", "dest": "/api/gate?page=content-essentials.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/youtube-automation.html", "dest": "/api/auth/gate?page=youtube-automation.html" },
+    { "src": "/youtube-prompts.html", "dest": "/api/auth/gate?page=youtube-prompts.html" },
+    { "src": "/youtube-resources.html", "dest": "/api/auth/gate?page=youtube-resources.html" },
+    { "src": "/facebook-automation.html", "dest": "/api/auth/gate?page=facebook-automation.html" },
+    { "src": "/whop-clipping.html", "dest": "/api/auth/gate?page=whop-clipping.html" },
+    { "src": "/content-essentials.html", "dest": "/api/auth/gate?page=content-essentials.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
