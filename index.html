@@ -2612,7 +2612,7 @@ function submitPassword() {
   const password = document.getElementById('password-input').value;
   const errEl = document.getElementById('password-error');
   errEl.style.display = 'none';
-  if (password === 'valuevault2025') {
+  if (['valuevault2020', 'automationvault', 'ytafbawhop'].includes(password)) {
     localStorage.setItem('vv_auth', '1');
     closeLoginModal();
     const params = new URLSearchParams(location.search);
